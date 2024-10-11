@@ -63,7 +63,7 @@ public class CartController {
 
         log.info("[{}] Saving cart", getClass().getSimpleName());
         Cart savedCart = cartRepository.save(cart);
-        log.info("[{}] Cart saved: {}", getClass().getSimpleName(), savedCart.getId());
+        log.info("[{}] Cart saved", getClass().getSimpleName());
 
         return ResponseEntity.ok(cart);
     }
@@ -96,8 +96,8 @@ public class CartController {
                 .forEach(i -> cart.removeItem(item.get()));
 
         log.info("[{}] Saving cart", getClass().getSimpleName());
-        Cart savedCart = cartRepository.save(cart);
-        log.info("[{}] Cart saved: {}", getClass().getSimpleName(), savedCart.getId());
+        cartRepository.save(cart);
+        log.info("[{}] Cart saved: {}", getClass().getSimpleName());
 
         return ResponseEntity.ok(cart);
     }

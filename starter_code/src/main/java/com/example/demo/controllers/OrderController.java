@@ -40,7 +40,7 @@ public class OrderController {
 
         log.info("Saving order for user: {}", username);
         UserOrder userOrder = orderRepository.save(order);
-        log.info("Order saved for user: {}", userOrder.getId());
+        log.info("Order saved for user {}", userOrder);
 
         return ResponseEntity.ok(order);
     }

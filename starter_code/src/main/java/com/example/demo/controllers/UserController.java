@@ -28,14 +28,22 @@ public class UserController {
 
     @GetMapping("/id/{id}")
     public ResponseEntity<User> findById(@PathVariable Long id) {
+        log.info("Find user by id {}", id);
         return ResponseEntity.of(userRepository.findById(id));
     }
 
     @GetMapping("/{username}")
     public ResponseEntity<User> findByUserName(@PathVariable String username) {
+        log.info("Find user by username {}", username);
         User user = userRepository.findByUsername(username);
-        return user == null ? ResponseEntity.notFound()
-                .build() : ResponseEntity.ok(user);
+
+        if (user == null) {
+            log.warn("User not found with username {}", username);
+            return ResponseEntity.notFound()
+                    .build();
+        }
+
+        return ResponseEntity.ok(user);
     }
 
     @PostMapping("/create")
@@ -49,11 +57,12 @@ public class UserController {
         if (createUserRequest.getPassword()
                     .length() < 7 || !createUserRequest.getPassword()
                 .equals(createUserRequest.getConfirmPassword())) {
-            log.error("Error with user password. Cannot create user {}", createUserRequest.getUsername());
+            log.warn("Error with user password. Cannot create user {}", createUserRequest.getUsername());
         }
         user.setPassword(bCryptPasswordEncoder.encode(createUserRequest.getPassword()));
 
-        userRepository.save(user);
+        User savedUser = userRepository.save(user);
+        log.info("Create user success with id {}", savedUser.getId());
         return ResponseEntity.ok(user);
     }
 

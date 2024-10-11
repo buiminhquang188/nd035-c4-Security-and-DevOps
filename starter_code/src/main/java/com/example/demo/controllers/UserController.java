@@ -58,6 +58,8 @@ public class UserController {
                     .length() < 7 || !createUserRequest.getPassword()
                 .equals(createUserRequest.getConfirmPassword())) {
             log.warn("Error with user password. Cannot create user {}", createUserRequest.getUsername());
+            return ResponseEntity.badRequest()
+                    .build();
         }
         user.setPassword(bCryptPasswordEncoder.encode(createUserRequest.getPassword()));
 
